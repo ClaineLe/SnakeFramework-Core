@@ -6,6 +6,7 @@ namespace com.snake.framework
     {
         public class BootDriver : MonoBehaviour
         {
+            public const string RUNTIME_ASSEMBLY = "Assembly-CSharp";
             public const string CUSTOM_NAMESPACE = "com.snake.framework.custom.runtime";
             public string CustomAppFacadeClassName = "AppFacadeCostom";
             public IAppFacadeCostom mAppFacadeCostom { get; private set; }
@@ -22,12 +23,13 @@ namespace com.snake.framework
             private IAppFacadeCostom _CreateCostomAppFacade() 
             {
                 System.Type type = default;
-                var s_Assemblies = Utility.Assembly.GetAssemblies();
-                foreach (var a in s_Assemblies)
+                System.Reflection.Assembly[] s_Assemblies = Utility.Assembly.GetAssemblies();
+                foreach (System.Reflection.Assembly assembly in s_Assemblies)
                 {
-                    if (a.FullName.StartsWith(CUSTOM_NAMESPACE))
+                    if (assembly.GetName().Name.Equals(RUNTIME_ASSEMBLY))
                     {
-                        type = a.GetType(CUSTOM_NAMESPACE + "." + CustomAppFacadeClassName);
+                        type = assembly.GetType(CUSTOM_NAMESPACE + "." + CustomAppFacadeClassName);
+                        break;
                     }
                 }
 
