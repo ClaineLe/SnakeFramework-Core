@@ -1,8 +1,8 @@
 ﻿{
   "name": "com.snake.framework.core",
   "displayName": "SnakeFramework-Core",
-  "version": "0.0.4.0",
-  "unity": "2021.1",
+  "version": "0.0.9.1",
+  "unity": "2019.4",
   "license": "MIT",
   "keywords": [
     "snake",
