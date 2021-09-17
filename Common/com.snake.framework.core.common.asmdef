@@ -1,5 +1,5 @@
 {
-    "name": "com.snake.framework.common",
+    "name": "com.snake.framework.core.common",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
