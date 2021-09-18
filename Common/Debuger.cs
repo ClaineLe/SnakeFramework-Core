@@ -3,7 +3,7 @@ namespace com.snake.framework
     /// <summary>
     /// 框架日志
     /// </summary>
-    public class SnakeLog
+    public class Debuger
     {
         /// <summary>
         /// 输出日志信息
@@ -28,7 +28,7 @@ namespace com.snake.framework
         /// 输出调试信息
         /// </summary>
         /// <param name="message"></param>
-        static public void Debug(object message)
+        static public void Log(object message)
         {
             UnityEngine.Debug.Log(message);
         }
@@ -37,9 +37,9 @@ namespace com.snake.framework
         /// </summary>
         /// <param name="message"></param>
         /// <param name="args"></param>
-        static public void DebugFormat(string message, params object[] args)
+        static public void LogFormat(string message, params object[] args)
         {
-            Debug(Utility.Text.Format(message, args));
+            Log(Utility.Text.Format(message, args));
         }
 
         /// <summary>

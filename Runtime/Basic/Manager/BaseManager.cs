@@ -5,7 +5,7 @@
         public abstract class BaseManager : IManager
         {
             private AppFacade _appFacade;
-            protected AppFacade mAppFacade 
+            public AppFacade mAppFacade 
             {
                 get 
                 {
@@ -16,7 +16,16 @@
             }
             public virtual string mName => this.GetType().Name;
 
-            async public virtual void Initialization() { }
+            public virtual float mInitProgress { get; } = 1.0f;
+            public virtual float mPreloadProgress { get; } = 1.0f;
+
+            public virtual void Initialization()
+            { 
+            }
+
+            public virtual void Preload() 
+            { 
+            }
         }
     }
 }
