@@ -18,7 +18,7 @@ namespace com.snake.framework
 
             public void StartUp(BootDriver bootDriver)
             {
-                this._RegiestManager();
+                RegiestManager<ProcedureManager>();
                 bootDriver.mAppFacadeCostom.Initialization();
                 bootDriver.mAppFacadeCostom.GameLaunch();
             }
@@ -38,14 +38,6 @@ namespace com.snake.framework
                 if (this._managerDic.TryGetValue(typeof(T), out IManager manager) == false)
                     return null;
                 return manager as T;
-            }
-
-            private void _RegiestManager()
-            {
-                this.RegiestManager<AssetManager>();
-                this.RegiestManager<ProcedureManager>();
-                this.RegiestManager<NetworkManager>();
-                this.RegiestManager<UIManager>();
             }
 
             public void InitManagers()

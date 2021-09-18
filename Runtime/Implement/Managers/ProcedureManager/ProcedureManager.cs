@@ -28,7 +28,7 @@ namespace com.snake.framework
                 {
                     if (autoRegiest == false)
                     {
-                        SnakeLog.ErrorFormat("切换流程失败。不存在流程:{0}", procedureName);
+                        Debuger.ErrorFormat("切换流程失败。不存在流程:{0}", procedureName);
                         return false;
                     }
                     this.RegiestProcedure<T>();
