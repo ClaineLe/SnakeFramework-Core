@@ -44,6 +44,12 @@
         protected virtual void onExit(T owner, IState<T> toState) { }
 
         /// <summary>
+        /// 生命周期 - 销毁状态时
+        /// </summary>
+        /// <param name="owner"></param>
+        protected virtual void onDispose(T owner) { }
+
+        /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="owner"></param>
@@ -85,6 +91,14 @@
         public void Exit(T owner, IState<T> toState)
         {
             onExit(owner, toState);
+        }
+
+        /// <summary>
+        /// 销毁状态
+        /// </summary>
+        public void Dispose(T owner) 
+        {
+            onDispose(owner);
         }
     }
 }

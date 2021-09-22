@@ -8,7 +8,7 @@ namespace com.snake.framework
         {
             public LifeCycle mLifeCycle;
             private Dictionary<System.Type, IManager> _managerDic;
-
+            private IAppFacadeCostom _appFacadeCostom;
             protected override void onInitialize()
             {
                 base.onInitialize();
@@ -16,21 +16,29 @@ namespace com.snake.framework
                 this.mLifeCycle = LifeCycle.Create();
             }
 
-            public void StartUp(BootDriver bootDriver)
+            public void StartUp(IAppFacadeCostom appFacadeCostom)
             {
-                RegiestManager<ProcedureManager>();
-                bootDriver.mAppFacadeCostom.Initialization();
-                bootDriver.mAppFacadeCostom.GameLaunch();
+                this._appFacadeCostom = appFacadeCostom;
+                ProcedureManager procedureMgr = RegiestManager<ProcedureManager>();
+                this._appFacadeCostom.Initialization();
+                procedureMgr.SwitchProcedure<BootUpProcedure>();
             }
 
-            public void RegiestManager<T>(bool replace = false) where T : IManager
+            public void EnterGameContent() 
+            {
+                this._appFacadeCostom.EnterGameContent();
+            }
+
+            public T RegiestManager<T>(bool replace = false) where T : IManager
             {
                 System.Type mgrType = typeof(T);
                 if (replace == false && _managerDic.ContainsKey(mgrType) == true)
                 {
                     throw new System.Exception("管理器已经存在.MgrName:" + mgrType);
                 }
-                _managerDic[mgrType] = System.Activator.CreateInstance(mgrType) as IManager;
+                T manager = (T)System.Activator.CreateInstance(mgrType);
+                _managerDic[mgrType] = manager;
+                return manager;
             }
 
             public T GetManager<T>() where T : class, IManager

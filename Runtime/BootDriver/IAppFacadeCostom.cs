@@ -6,7 +6,7 @@
         {
             void Initialization();
 
-            void GameLaunch();
+            void EnterGameContent();
         }
     }
 }
