@@ -7,8 +7,7 @@ namespace com.snake.framework
     /// 有限状态机
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class FiniteStateMachine<T> : IFiniteStateMachine<T>
-        where T : class, IFiniteStateMachineOwner
+    public class FiniteStateMachine<T> where T : class, IFiniteStateMachineOwner
     {
         /// <summary>
         /// 状态机持有者
@@ -53,18 +52,6 @@ namespace com.snake.framework
         /// <summary>
         /// 切换状态
         /// </summary>
-        /// <typeparam name="IS"></typeparam>
-        /// <param name="userData"></param>
-        /// <returns></returns>
-        public bool Switch<IS>(object userData)
-            where IS : class, IState<T>
-        {
-            return Switch(typeof(T).Name, userData);
-        }
-
-        /// <summary>
-        /// 切换状态
-        /// </summary>
         /// <param name="stateName"></param>
         /// <param name="userData"></param>
         /// <returns></returns>
@@ -99,18 +86,6 @@ namespace com.snake.framework
         /// <summary>
         /// 获取状态
         /// </summary>
-        /// <typeparam name="IS"></typeparam>
-        /// <returns></returns>
-        public IS GetState<IS>()
-            where IS : class, IState<T>
-        {
-            IState<T> state = GetState(typeof(IS).Name);
-            return state == null ? null : state as IS;
-        }
-
-        /// <summary>
-        /// 获取状态
-        /// </summary>
         /// <param name="stateName"></param>
         /// <returns></returns>
         public IState<T> GetState(string stateName)
@@ -126,27 +101,28 @@ namespace com.snake.framework
         /// </summary>
         /// <typeparam name="IS"></typeparam>
         /// <returns></returns>
-        public IS AddState<IS>()
-            where IS : class, IState<T>, new()
+        public void AddState(string stateName, IState<T> stateTarget, bool replace)
         {
-            if (HasState<IS>() == true)
+            if (HasState(stateName) == true && replace == false)
             {
-                Debug.LogErrorFormat("状态已存在，添加状态失败. State:{0}", typeof(IS).Name);
+                Debug.LogErrorFormat("状态已存在，添加状态失败. State:{0}", stateName);
+                return;
             }
-            IS state = new IS();
-            this._stateDic.Add(typeof(IS).Name, state);
-            return state;
+            this._stateDic.Add(stateName, stateTarget);
         }
 
         /// <summary>
-        /// 是否存在状态
+        /// 移除状态
         /// </summary>
-        /// <typeparam name="IS"></typeparam>
+        /// <param name="stateName"></param>
         /// <returns></returns>
-        public bool HasState<IS>()
-            where IS : class, IState<T>
+        public bool RemoveState(string stateName)
         {
-            return HasState(typeof(IS).Name);
+            IState<T> state = GetState(stateName);
+            if (state == null)
+                return false;
+            state.Dispose(this.mOwner);
+            return true;
         }
 
         /// <summary>

@@ -1,10 +1,7 @@
 ﻿namespace com.snake.framework
 {
-    namespace runtime
+    public interface ISingleton
     {
-        public interface ISingleton
-        {
 
-        }
     }
 }

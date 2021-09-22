@@ -17,7 +17,7 @@ namespace com.snake.framework
 
             private void Start()
             {
-                Singleton<AppFacade>.GetInstance().StartUp(this);
+                Singleton<AppFacade>.GetInstance().StartUp(mAppFacadeCostom);
             }
 
             private IAppFacadeCostom _CreateCostomAppFacade() 

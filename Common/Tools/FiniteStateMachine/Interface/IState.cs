@@ -43,5 +43,10 @@
         /// <param name="owner"></param>
         /// <param name="toState"></param>
         void Exit(T owner, IState<T> toState);
+
+        /// <summary>
+        /// 销毁状态
+        /// </summary>
+        void Dispose(T owner);
     }
 }
