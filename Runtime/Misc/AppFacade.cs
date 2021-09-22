@@ -50,10 +50,16 @@ namespace com.snake.framework
 
             public void InitManagers()
             {
-                foreach (var a in _managerDic)
-                {
-                    a.Value.Initialization();
-                }
+                Dictionary<System.Type, IManager>.Enumerator enumerator = this._managerDic.GetEnumerator();
+                while (enumerator.MoveNext())
+                    enumerator.Current.Value.Initialization();
+            }
+
+            public void PreloadManagers()
+            {
+                Dictionary<System.Type, IManager>.Enumerator enumerator = this._managerDic.GetEnumerator();
+                while (enumerator.MoveNext())
+                    enumerator.Current.Value.Preload();
             }
 
             public float GetInitProgress()

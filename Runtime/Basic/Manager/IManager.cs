@@ -9,6 +9,7 @@ namespace com.snake.framework
             float mPreloadProgress { get; }
             void Initialization();
 
+            void Preload();
         }
     }
 }
