@@ -16,15 +16,17 @@
             }
             public virtual string mName => this.GetType().Name;
 
-            public virtual float mInitProgress { get; } = 1.0f;
-            public virtual float mPreloadProgress { get; } = 1.0f;
+            public float mInitProgress { get; protected set; } = 0.0f;
+            public  float mPreloadProgress { get; protected set; } = 0.0f;
 
             public virtual void Initialization()
-            { 
+            {
+                this.mInitProgress = 1.0f;
             }
 
             public virtual void Preload() 
-            { 
+            {
+                this.mPreloadProgress = 1.0f;
             }
         }
     }
