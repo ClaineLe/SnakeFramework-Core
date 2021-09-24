@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.7] - 2021-09-24
+###Modify
+- 使用UnityEngine.RuntimeInitializeOnLoadMethod启动游戏
+- 重构管理器的初始化和预加载框架
+
 ## [0.1.6] - 2021-09-23
 ###Fixed
 - 修复没有初始化完成，就直接进入下一个流程

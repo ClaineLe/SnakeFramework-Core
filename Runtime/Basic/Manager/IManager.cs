@@ -5,10 +5,9 @@ namespace com.snake.framework
         public interface IManager
         {
             string mName { get; }
-            float mInitProgress { get; }
-            float mPreloadProgress { get; }
+            float GetInitProgress();
+            float GetPreloadProgress();
             void Initialization();
-
             void Preload();
         }
     }

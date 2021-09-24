@@ -24,7 +24,7 @@ namespace com.snake.framework
                 procedureMgr.SwitchProcedure<BootUpProcedure>();
             }
 
-            public void EnterGameContent() 
+            public void EnterGameContent()
             {
                 this._appFacadeCostom.EnterGameContent();
             }
@@ -68,7 +68,7 @@ namespace com.snake.framework
                 float progress = 0.0f;
                 var enumerator = this._managerDic.GetEnumerator();
                 while (enumerator.MoveNext())
-                    progress += enumerator.Current.Value.mInitProgress;
+                    progress += enumerator.Current.Value.GetInitProgress();
                 if (count == progress)
                     return 1.0f;
                 return progress / count;
@@ -80,7 +80,7 @@ namespace com.snake.framework
                 float progress = 0.0f;
                 var enumerator = this._managerDic.GetEnumerator();
                 while (enumerator.MoveNext())
-                    progress += enumerator.Current.Value.mPreloadProgress ;
+                    progress += enumerator.Current.Value.GetPreloadProgress();
                 if (count == progress)
                     return 1.0f;
                 return progress / count;

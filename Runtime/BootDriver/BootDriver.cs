@@ -1,26 +1,28 @@
-using UnityEngine;
-
 namespace com.snake.framework
 {
     namespace runtime
     {
-        public class BootDriver : MonoBehaviour
+        public class BootDriver
         {
             public const string RUNTIME_ASSEMBLY = "Assembly-CSharp";
             public const string CUSTOM_NAMESPACE = "com.snake.framework.custom.runtime";
             public string CustomAppFacadeClassName = "AppFacadeCostom";
             public IAppFacadeCostom mAppFacadeCostom { get; private set; }
-            private void Awake()
+
+            [UnityEngine.RuntimeInitializeOnLoadMethod]
+            static public void BootUp()
             {
-                mAppFacadeCostom = _CreateCostomAppFacade();
+                BootDriver bootDriver = new BootDriver();
+                Singleton<AppFacade>.GetInstance().StartUp(bootDriver.mAppFacadeCostom);
             }
 
-            private void Start()
+            private BootDriver()
             {
-                Singleton<AppFacade>.GetInstance().StartUp(mAppFacadeCostom);
+                this.mAppFacadeCostom = _CreateCostomAppFacade();
             }
 
-            private IAppFacadeCostom _CreateCostomAppFacade() 
+
+            private IAppFacadeCostom _CreateCostomAppFacade()
             {
                 System.Type type = default;
                 System.Reflection.Assembly[] s_Assemblies = Utility.Assembly.GetAssemblies();

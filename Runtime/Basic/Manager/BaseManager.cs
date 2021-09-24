@@ -5,9 +5,9 @@
         public abstract class BaseManager : IManager
         {
             private AppFacade _appFacade;
-            public AppFacade mAppFacade 
+            public AppFacade mAppFacade
             {
-                get 
+                get
                 {
                     if (_appFacade == null)
                         _appFacade = Singleton<AppFacade>.GetInstance();
@@ -16,18 +16,14 @@
             }
             public virtual string mName => this.GetType().Name;
 
-            public float mInitProgress { get; protected set; } = 0.0f;
-            public  float mPreloadProgress { get; protected set; } = 0.0f;
+            public virtual float GetInitProgress() { return 1.0f; }
+            public virtual float GetPreloadProgress() { return 1.0f; }
 
-            public virtual void Initialization()
-            {
-                this.mInitProgress = 1.0f;
-            }
+            protected virtual void onInitialization() { }
+            protected virtual void onPreload() { }
 
-            public virtual void Preload() 
-            {
-                this.mPreloadProgress = 1.0f;
-            }
+            public void Initialization() { this.onInitialization(); }
+            public void Preload() { this.onPreload(); }
         }
     }
 }
