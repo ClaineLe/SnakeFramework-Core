@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.8] - 2021-09-27
+###Added
+- 增加BootDriverSetting.cs对框架进行配置
+
+###Modify
+- 重构Utility.Web
+- 增加BootDriverSetting.BootUpTagName来标记启动场景
+
 ## [0.1.7] - 2021-09-24
 ###Modify
 - 使用UnityEngine.RuntimeInitializeOnLoadMethod启动游戏
