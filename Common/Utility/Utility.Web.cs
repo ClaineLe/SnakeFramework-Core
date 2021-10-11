@@ -15,15 +15,17 @@ namespace com.snake.framework
             /// <param name="pUrl"></param>
             /// <param name="pTimeout"></param>
             /// <param name="pCallback"></param>
-            public static async Task<UnityWebRequest.Result> Get(string pUrl, Action<UnityWebRequest.Result> pCallback, int pTimeout)
+            public static async Task<UnityWebRequest.Result> Get(string uri, int timeout = 0, Action<UnityWebRequest.Result> callback = null)
             {
-                UnityWebRequest unityWebRequest = UnityWebRequest.Get(pUrl);
-                unityWebRequest.timeout = pTimeout;
-                await unityWebRequest.SendWebRequest();
-                UnityWebRequest.Result result = unityWebRequest.result;
-                pCallback?.Invoke(result);
-                unityWebRequest.Dispose();
-                return result;
+                using (UnityWebRequest unityWebRequest = UnityWebRequest.Get(uri))
+                {
+                    if (timeout > 0)
+                        unityWebRequest.timeout = timeout;
+                    await unityWebRequest.SendWebRequest();
+                    UnityWebRequest.Result result = unityWebRequest.result;
+                    callback?.Invoke(result);
+                    return result;
+                }
             }
 
             /// <summary>
@@ -32,82 +34,84 @@ namespace com.snake.framework
             /// <param name="pUrl"></param>
             /// <param name="pType">传类型的时候会序列化成该类型的对象 传byte[]或者string会返回对应对象 传其他则会走json反序列化</param>
             /// <param name="pCallback"></param>
-            public static async Task<UnityWebRequest.Result> Get(string pUrl, int pTimeout, Type pType, Action<UnityWebRequest.Result, object> pCallback)
+            public static async Task<UnityWebRequest.Result> Get(string uri, Type dataType, int timeout = 0, Action<UnityWebRequest.Result, object> callback = null)
             {
-                UnityWebRequest unityWebRequest = UnityWebRequest.Get(pUrl);
-                unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
-                unityWebRequest.timeout = pTimeout;
-                await unityWebRequest.SendWebRequest();
-                UnityWebRequest.Result result = unityWebRequest.result;
-
-                if (result != UnityWebRequest.Result.Success)
+                using (UnityWebRequest unityWebRequest = UnityWebRequest.Get(uri))
                 {
-                    pCallback?.Invoke(result, null);
-                    unityWebRequest.Dispose();
+                    unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
+                    if (timeout > 0)
+                        unityWebRequest.timeout = timeout;
+                    await unityWebRequest.SendWebRequest();
+                    UnityWebRequest.Result result = unityWebRequest.result;
+
+                    if (result != UnityWebRequest.Result.Success)
+                    {
+                        callback?.Invoke(result, null);
+                        return result;
+                    }
+
+                    if (dataType == typeof(string))
+                    {
+                        callback?.Invoke(result, unityWebRequest.downloadHandler.text);
+                        return result;
+                    }
+
+                    if (dataType != null)
+                    {
+                        var content = unityWebRequest.downloadHandler.text;
+                        var jsonObj = Utility.Json.FromJson(content, dataType);
+                        callback?.Invoke(result, jsonObj);
+                        return result;
+                    }
+
+                    callback?.Invoke(result, unityWebRequest.downloadHandler.data);
                     return result;
                 }
-
-                if (pType == typeof(string))
-                {
-                    pCallback?.Invoke(result, unityWebRequest.downloadHandler.text);
-                    unityWebRequest.Dispose();
-                    return result;
-                }
-
-                if (pType != null)
-                {
-                    var content = unityWebRequest.downloadHandler.text;
-                    var jsonObj = com.snake.framework.Utility.Json.FromJson(content, pType);
-                    pCallback?.Invoke(result, jsonObj);
-                    unityWebRequest.Dispose();
-                    return result;
-                }
-
-                pCallback?.Invoke(result, unityWebRequest.downloadHandler.data);
-                unityWebRequest.Dispose();
-                return result;
             }
-
-
+          
             /// <summary>
             /// Post方式访问http
             /// </summary>
             /// <param name="pUrl"></param>
             /// <param name="pTimeout"></param>
             /// <param name="pCallback"></param>
-            public static async Task<UnityWebRequest.Result> Post(string pUrl, string postData, Action<UnityWebRequest.Result, string> pCallback, int pTimeout)
+            public static async Task<UnityWebRequest.Result> Post(string uri, string postData, int timeout = 0, Action<UnityWebRequest.Result, string> callback = null)
             {
-                UnityWebRequest unityWebRequest = UnityWebRequest.Post(pUrl, postData);
-                unityWebRequest.timeout = pTimeout;
-                await unityWebRequest.SendWebRequest();
-                UnityWebRequest.Result result = unityWebRequest.result;
-                var text = string.Empty;
-                if (unityWebRequest.downloadHandler != null)
+                using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(uri, postData))
                 {
-                    text = unityWebRequest.downloadHandler.text;
+                    if (timeout > 0)
+                        unityWebRequest.timeout = timeout;
+                    await unityWebRequest.SendWebRequest();
+                    UnityWebRequest.Result result = unityWebRequest.result;
+                    var text = string.Empty;
+                    if (unityWebRequest.downloadHandler != null)
+                    {
+                        text = unityWebRequest.downloadHandler.text;
+                    }
+                    callback?.Invoke(result, text);
+                    return result;
                 }
-                pCallback?.Invoke(result, text);
-                unityWebRequest.Dispose();
-                return result;
             }
-
+          
             /// <summary>
             /// Post方式访问http
             /// </summary>
             /// <param name="pUrl"></param>
             /// <param name="pTimeout"></param>
             /// <param name="pCallback"></param>
-            public static async Task<UnityWebRequest.Result> Post(string pUrl, Dictionary<string, string> pFormDataDict, Action<UnityWebRequest.Result> pCallback, int pTimeout)
+            public static async Task<UnityWebRequest.Result> Post(string uri, Dictionary<string, string> formDataDict, int timeout = 0, Action<UnityWebRequest.Result> callback = null)
             {
-                UnityWebRequest unityWebRequest = UnityWebRequest.Post(pUrl, pFormDataDict);
-                unityWebRequest.timeout = pTimeout;
-                await unityWebRequest.SendWebRequest();
-                UnityWebRequest.Result result = unityWebRequest.result;
-                pCallback?.Invoke(result);
-                unityWebRequest.Dispose();
-                return result;
+                using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(uri, formDataDict))
+                {
+                    if (timeout > 0)
+                        unityWebRequest.timeout = timeout;
+                    await unityWebRequest.SendWebRequest();
+                    UnityWebRequest.Result result = unityWebRequest.result;
+                    callback?.Invoke(result);
+                    return result;
+                }
             }
-
+          
             /// <summary>
             /// Post方式访问
             /// </summary>
@@ -116,38 +120,89 @@ namespace com.snake.framework
             /// <param name="pTimeout"></param>
             /// <param name="type">传类型的时候会序列化成该类型的对象 传byte[]或者string会返回对应对象 传其他则会走json反序列化</param>
             /// <param name="pCallback"></param>
-            public static async Task<UnityWebRequest.Result> Post(string pUrl, Dictionary<string, string> pFormDataDict, Type type, Action<UnityWebRequest.Result, object> pCallback, int pTimeout)
+            public static async Task<UnityWebRequest.Result> Post(string uri, Dictionary<string, string> formDataDict, Type dataType, int timeout = 0, Action<UnityWebRequest.Result, object> callback = null)
             {
-                UnityWebRequest unityWebRequest = UnityWebRequest.Post(pUrl, pFormDataDict);
-                unityWebRequest.timeout = pTimeout;
-                await unityWebRequest.SendWebRequest();
-                UnityWebRequest.Result result = unityWebRequest.result;
-                if (result != UnityWebRequest.Result.Success)
+                using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(uri, formDataDict))
                 {
-                    pCallback?.Invoke(result, null);
-                    unityWebRequest.Dispose();
+                    if (timeout > 0)
+                        unityWebRequest.timeout = timeout;
+                    await unityWebRequest.SendWebRequest();
+                    UnityWebRequest.Result result = unityWebRequest.result;
+                    if (result != UnityWebRequest.Result.Success)
+                    {
+                        callback?.Invoke(result, null);
+                        return result;
+                    }
+
+                    if (dataType == typeof(byte[]))
+                    {
+                        callback?.Invoke(result, unityWebRequest.downloadHandler.data);
+                        return result;
+                    }
+
+                    if (dataType == typeof(string))
+                    {
+                        callback?.Invoke(result, unityWebRequest.downloadHandler.text);
+                        return result;
+                    }
+
+                    var content = unityWebRequest.downloadHandler.text;
+                    var jsonObj = com.snake.framework.Utility.Json.FromJson(content, dataType);
+                    callback?.Invoke(result, jsonObj);
                     return result;
                 }
-
-                if (type == typeof(byte[]))
+            }
+      
+            /// <summary>
+            /// 请求头
+            /// </summary>
+            /// <param name="url"></param>
+            /// <param name="timeOut"></param>
+            /// <param name="callback"></param>
+            /// <returns></returns>
+            public static async Task<UnityWebRequest.Result> GetResponseHeader(string uri, string headName, int timeOut = 0, Action<UnityWebRequest.Result, string> callback = null)
+            {
+                using (UnityWebRequest unityWebRequest = UnityWebRequest.Head(uri))
                 {
-                    pCallback?.Invoke(result, unityWebRequest.downloadHandler.data);
-                    unityWebRequest.Dispose();
+                    if (timeOut > 0)
+                        unityWebRequest.timeout = timeOut;
+                    await unityWebRequest.SendWebRequest();
+                    UnityWebRequest.Result result = unityWebRequest.result;
+                    if (result != UnityWebRequest.Result.Success)
+                    {
+                        callback?.Invoke(result, null);
+                        return result;
+                    }
+                    string headValue = unityWebRequest.GetResponseHeader(headName);
+                    callback?.Invoke(result, headValue);
                     return result;
                 }
-
-                if (type == typeof(string))
+            }
+          
+            /// <summary>
+            /// 请求所有头
+            /// </summary>
+            /// <param name="url"></param>
+            /// <param name="timeOut"></param>
+            /// <param name="callback"></param>
+            /// <returns></returns>
+            public static async Task<UnityWebRequest.Result> GetResponseHeaders(string uri, int timeOut = 0, Action<UnityWebRequest.Result, Dictionary<string, string>> callback = null)
+            {
+                using (UnityWebRequest unityWebRequest = UnityWebRequest.Head(uri))
                 {
-                    pCallback?.Invoke(result, unityWebRequest.downloadHandler.text);
-                    unityWebRequest.Dispose();
+                    if (timeOut > 0)
+                        unityWebRequest.timeout = timeOut;
+                    await unityWebRequest.SendWebRequest();
+                    UnityWebRequest.Result result = unityWebRequest.result;
+                    if (result != UnityWebRequest.Result.Success)
+                    {
+                        callback?.Invoke(result, null);
+                        return result;
+                    }
+                    Dictionary<string,string> headDict = unityWebRequest.GetResponseHeaders();
+                    callback?.Invoke(result, headDict);
                     return result;
                 }
-
-                var content = unityWebRequest.downloadHandler.text;
-                var jsonObj = com.snake.framework.Utility.Json.FromJson(content, type);
-                pCallback?.Invoke(result, jsonObj);
-                unityWebRequest.Dispose();
-                return result;
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace com.halo.framework
+﻿namespace com.snake.framework
 {
     /// <summary>
     /// 对象池信息接口

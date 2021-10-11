@@ -12,21 +12,33 @@ namespace com.snake.framework
             protected override void onInitialize()
             {
                 base.onInitialize();
+                LifeCycle.Initialization();
                 this._managerDic = new Dictionary<System.Type, IManager>();
-                this.mLifeCycle = LifeCycle.Create();
+            }
+
+            private void _regiestBuildInManager() 
+            {
+                RegiestManager<ProcedureManager>();
+                RegiestManager<DownloadManager>();
             }
 
             public void StartUp(IAppFacadeCostom appFacadeCostom)
             {
                 this._appFacadeCostom = appFacadeCostom;
-                ProcedureManager procedureMgr = RegiestManager<ProcedureManager>();
+                this._regiestBuildInManager();
                 this._appFacadeCostom.Initialization();
-                procedureMgr.SwitchProcedure<BootUpProcedure>();
+                this.GetManager<ProcedureManager>()?.SwitchProcedure<BootUpProcedure>();
             }
 
             public void EnterGameContent()
             {
                 this._appFacadeCostom.EnterGameContent();
+            }
+
+            public T GetAppFacadeCostom<T>()
+                where T : class, IAppFacadeCostom
+            {
+                return _appFacadeCostom as T;
             }
 
             public T RegiestManager<T>(bool replace = false) where T : IManager
