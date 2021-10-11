@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-namespace com.halo.framework
+namespace com.snake.framework
 {
     /// <summary>
     /// 引用池

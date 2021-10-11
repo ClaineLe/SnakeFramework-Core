@@ -108,7 +108,7 @@ namespace com.snake.framework
                 Debug.LogErrorFormat("状态已存在，添加状态失败. State:{0}", stateName);
                 return;
             }
-            this._stateDic.Add(stateName, stateTarget);
+            this._stateDic[stateName] = stateTarget;
         }
 
         /// <summary>

@@ -14,11 +14,10 @@ namespace com.snake.framework
             static public SnakeEvent<int, float, float, float, float> mUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
             static public SnakeEvent<int, float, float, float, float> mLateUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
 
-            static public LifeCycle Create() 
+            static public void Initialization()
             {
-                GameObject lifeCycleRoot = new UnityEngine.GameObject("LifeCycle");
+                GameObject lifeCycleRoot = new UnityEngine.GameObject("LifeCycle", new[] { typeof(LifeCycle) });
                 GameObject.DontDestroyOnLoad(lifeCycleRoot);
-                return lifeCycleRoot.AddComponent<LifeCycle>();
             }
 
             private void Start()

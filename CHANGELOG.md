@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.9] - 2021-10-11
+###Added
+- 下载管理器(DownloadManager)
+- 获取自定义门户实例API接口(GetAppFacadeCostom<T>())
+
+###Modify
+- 优化启动流程的代码实现
+- 优化Utility.Web代码结构
+- 优化引用池工具的命名空间
+
+###Fixed
+- 增加已存在的状态，导致报错
+
 ## [0.1.8] - 2021-09-27
 ###Added
 - 增加BootDriverSetting.cs对框架进行配置

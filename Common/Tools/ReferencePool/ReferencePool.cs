@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace com.halo.framework
+namespace com.snake.framework
 {
     /// <summary>
     /// 引用对象池
