@@ -4,41 +4,41 @@ namespace com.snake.framework
 {
     namespace runtime
     {
-        public class AppFacade : Singleton<AppFacade>, ISingleton
+        public class SnakeFramework
         {
-            public LifeCycle mLifeCycle;
-            private Dictionary<System.Type, IManager> _managerDic;
-            private IAppFacadeCostom _appFacadeCostom;
-            protected override void onInitialize()
+            static private SnakeFramework _instance;
+            static public SnakeFramework Instance
             {
-                base.onInitialize();
+                get {
+                    if (_instance == null)
+                    { 
+                        _instance = new SnakeFramework();
+                        _instance.initialize();
+                    }
+                    return _instance;
+                }
+            }
+
+            private Dictionary<System.Type, IManager> _managerDic;
+            private ISnakeFrameworkExt _snakeFrameworkExt;
+
+            protected void initialize()
+            {
                 LifeCycle.Initialization();
                 this._managerDic = new Dictionary<System.Type, IManager>();
             }
 
-            private void _regiestBuildInManager() 
+            public void StartUp(ISnakeFrameworkExt snakeFrameworkExt)
             {
-                RegiestManager<ProcedureManager>();
-                RegiestManager<DownloadManager>();
-            }
-
-            public void StartUp(IAppFacadeCostom appFacadeCostom)
-            {
-                this._appFacadeCostom = appFacadeCostom;
-                this._regiestBuildInManager();
-                this._appFacadeCostom.Initialization();
-                this.GetManager<ProcedureManager>()?.SwitchProcedure<BootUpProcedure>();
+                this._snakeFrameworkExt = snakeFrameworkExt;
+                ProcedureManager procedureMgr = RegiestManager<ProcedureManager>();
+                this._snakeFrameworkExt.Initialization();
+                procedureMgr.SwitchProcedure<BootUpProcedure>();
             }
 
             public void EnterGameContent()
             {
-                this._appFacadeCostom.EnterGameContent();
-            }
-
-            public T GetAppFacadeCostom<T>()
-                where T : class, IAppFacadeCostom
-            {
-                return _appFacadeCostom as T;
+                this._snakeFrameworkExt.EnterGameContent();
             }
 
             public T RegiestManager<T>(bool replace = false) where T : IManager

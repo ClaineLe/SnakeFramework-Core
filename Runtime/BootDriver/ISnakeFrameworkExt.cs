@@ -2,7 +2,7 @@
 {
     namespace runtime
     {
-        public interface IAppFacadeCostom
+        public interface ISnakeFrameworkExt
         {
             void Initialization();
 
