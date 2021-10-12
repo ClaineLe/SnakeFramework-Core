@@ -4,16 +4,6 @@
     {
         public abstract class BaseManager : IManager
         {
-            private AppFacade _appFacade;
-            public AppFacade mAppFacade
-            {
-                get
-                {
-                    if (_appFacade == null)
-                        _appFacade = Singleton<AppFacade>.GetInstance();
-                    return _appFacade;
-                }
-            }
             public virtual string mName => this.GetType().Name;
 
             public virtual float GetInitProgress() { return 1.0f; }

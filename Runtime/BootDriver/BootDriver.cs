@@ -4,9 +4,9 @@ namespace com.snake.framework
 {
     namespace runtime
     {
-        public class BootDriver
+        internal class BootDriver
         {
-            public IAppFacadeCostom mAppFacadeCostom { get; private set; }
+            public ISnakeFrameworkExt mSnakeFrameworkExt { get; private set; }
 
             [UnityEngine.RuntimeInitializeOnLoadMethod]
             static public void BootUp()
@@ -46,7 +46,7 @@ namespace com.snake.framework
 
 
                 BootDriver bootDriver = new BootDriver(bootDriverSetting);
-                Singleton<AppFacade>.GetInstance().StartUp(bootDriver.mAppFacadeCostom);
+                SnakeFramework.Instance.StartUp(bootDriver.mSnakeFrameworkExt);
             }
             private BootDriver(BootDriverSetting bootDriverSetting)
             {
@@ -56,7 +56,7 @@ namespace com.snake.framework
                 {
                     if (assembly.GetName().Name.Equals(bootDriverSetting.RuntimeAssemblyName))
                     {
-                        type = assembly.GetType(bootDriverSetting.CustomAppFacadeTypeFullName);
+                        type = assembly.GetType(bootDriverSetting.FrameworkExtTypeFullName);
                         break;
                     }
                 }
@@ -67,7 +67,7 @@ namespace com.snake.framework
                 object appFacadeCostomObj = System.Activator.CreateInstance(type);
                 if (appFacadeCostomObj == null)
                     throw new System.Exception("没有找到应用门户的自定义实现对象(IAppFacadeCostom)。");
-                this.mAppFacadeCostom = appFacadeCostomObj as IAppFacadeCostom;
+                this.mSnakeFrameworkExt = appFacadeCostomObj as ISnakeFrameworkExt;
             }
         }
     }
