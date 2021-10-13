@@ -9,7 +9,7 @@ namespace com.snake.framework
             public ProcedureManager()
             {
                 this._procedureFsm = new FiniteStateMachine<ProcedureManager>(this);
-                LifeCycle.mUpdateHandle.AddEventHandler(this._procedureFsm.Tick);
+                mFramework.mLifeCycle.mUpdateHandle.AddEventHandler(this._procedureFsm.Tick);
                 RegiestProcedure<BootUpProcedure>();
                 RegiestProcedure<SplashProcedure>();
                 RegiestProcedure<PreloadProcedure>();

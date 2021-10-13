@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.11] - 2021-10-13
+###Added
+- 生命周期，增加GUI句柄
+- 管理器增加注册完成的生命周期
+- 框架GameObject根节点
+- 管理器基类增加框架引用mSnakeFramework
+
+###Modify
+- 生命周期修改为对象引用(SnakeFramework.mLifeCycle)
+
 ## [0.1.10] - 2021-10-12
 ###Modify
 - 修改脚本名字
