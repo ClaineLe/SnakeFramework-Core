@@ -21,10 +21,13 @@ namespace com.snake.framework
 
             private Dictionary<System.Type, IManager> _managerDic;
             private ISnakeFrameworkExt _snakeFrameworkExt;
-
+            public LifeCycle mLifeCycle { get; private set; }
+            public UnityEngine.GameObject mRoot { get; private set; }
             protected void initialize()
             {
-                LifeCycle.Initialization();
+                mRoot = new UnityEngine.GameObject("SnakeRoot");
+                UnityEngine.GameObject.DontDestroyOnLoad(mRoot);
+                this.mLifeCycle = LifeCycle.Create(mRoot);
                 this._managerDic = new Dictionary<System.Type, IManager>();
             }
 
@@ -49,6 +52,7 @@ namespace com.snake.framework
                     throw new System.Exception("管理器已经存在.MgrName:" + mgrType);
                 }
                 T manager = (T)System.Activator.CreateInstance(mgrType);
+                manager.Regiested();
                 _managerDic[mgrType] = manager;
                 return manager;
             }

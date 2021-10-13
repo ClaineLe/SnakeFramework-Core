@@ -106,7 +106,7 @@ namespace com.snake.framework
                 if (_downloading == false)
                 {
                     _downloading = true;
-                    LifeCycle.mUpdateHandle.AddEventHandler(onDownloadProcess);
+                    mFramework.mLifeCycle.mUpdateHandle.AddEventHandler(onDownloadProcess);
                 }
             }
 
@@ -152,7 +152,7 @@ namespace com.snake.framework
                     if (a.mIsDone == false)
                         return;
                 }
-                LifeCycle.mUpdateHandle.RemoveEventHandler(onDownloadProcess);
+                mFramework.mLifeCycle.mUpdateHandle.RemoveEventHandler(onDownloadProcess);
 
                 //重置环境
                 reset();

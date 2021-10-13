@@ -7,6 +7,7 @@ namespace com.snake.framework
             string mName { get; }
             float GetInitProgress();
             float GetPreloadProgress();
+            void Regiested();
             void Initialization();
             void Preload();
         }

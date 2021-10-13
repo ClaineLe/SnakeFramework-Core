@@ -6,23 +6,29 @@ namespace com.snake.framework
     {
         public class LifeCycle : MonoBehaviour
         {
-            static public SnakeEvent mStartHandle = new SnakeEvent();
-            static public SnakeEvent mApplicationQuitHandle = new SnakeEvent();
-            static public SnakeEvent<bool> mApplicationFocusHandle = new SnakeEvent<bool>();
-            static public SnakeEvent<bool> mApplicationPauseHandle = new SnakeEvent<bool>();
-            static public SnakeEvent<int, float, float, float, float> mFixedUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
-            static public SnakeEvent<int, float, float, float, float> mUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
-            static public SnakeEvent<int, float, float, float, float> mLateUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
+            public SnakeEvent mStartHandle = new SnakeEvent();
 
-            static public void Initialization()
+            public SnakeEvent mGUIHandle = new SnakeEvent();
+            public SnakeEvent<int, float, float, float, float> mFixedUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
+            public SnakeEvent<int, float, float, float, float> mUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
+            public SnakeEvent<int, float, float, float, float> mLateUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
+
+            public SnakeEvent mApplicationQuitHandle = new SnakeEvent();
+            public SnakeEvent<bool> mApplicationFocusHandle = new SnakeEvent<bool>();
+            public SnakeEvent<bool> mApplicationPauseHandle = new SnakeEvent<bool>();
+
+            static public LifeCycle Create(GameObject frameworkRoot)
             {
-                GameObject lifeCycleRoot = new UnityEngine.GameObject("LifeCycle", new[] { typeof(LifeCycle) });
-                GameObject.DontDestroyOnLoad(lifeCycleRoot);
+                return frameworkRoot.AddComponent<LifeCycle>();
             }
 
             private void Start()
             {
                 mStartHandle?.BroadCastEvent();
+            }
+            private void OnGUI()
+            {
+                mGUIHandle?.BroadCastEvent();
             }
 
             private void FixedUpdate()
