@@ -9,6 +9,18 @@
             public const string Windows = "Windows";
             public const string OSX = "OSX";
 
+
+#if UNITY_EDITOR
+            static public bool Editor = true;
+#else
+            static public bool Editor = false;
+#endif
+
+            public static bool IsIOS() 
+            {
+                return GetPlatformName().Equals(iOS);
+            }
+
             public static string GetPlatformName()
             {
 #if UNITY_EDITOR
@@ -27,15 +39,15 @@
                         return null;
                 }
 #else
-              switch (Application.platform)
+              switch (UnityEngine.Application.platform)
                 {
-                    case RuntimePlatform.Android:
+                    case UnityEngine.RuntimePlatform.Android:
                         return "Android";
-                    case RuntimePlatform.IPhonePlayer:
+                    case UnityEngine.RuntimePlatform.IPhonePlayer:
                         return "iOS";
-                    case RuntimePlatform.WindowsPlayer:
+                    case UnityEngine.RuntimePlatform.WindowsPlayer:
                         return "Windows";
-                    case RuntimePlatform.OSXPlayer:
+                    case UnityEngine.RuntimePlatform.OSXPlayer:
                         return "OSX";
                     default:
                         return null;

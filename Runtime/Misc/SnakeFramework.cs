@@ -34,9 +34,11 @@ namespace com.snake.framework
             public void StartUp(ISnakeFrameworkExt snakeFrameworkExt)
             {
                 this._snakeFrameworkExt = snakeFrameworkExt;
-                ProcedureManager procedureMgr = RegiestManager<ProcedureManager>();
+                RegiestManager<TimerManager>();
+                RegiestManager<DownloadManager>();
+                RegiestManager<ProcedureManager>();
                 this._snakeFrameworkExt.Initialization();
-                procedureMgr.SwitchProcedure<BootUpProcedure>();
+                GetManager<ProcedureManager>().SwitchProcedure<BootUpProcedure>();
             }
 
             public void EnterGameContent()
