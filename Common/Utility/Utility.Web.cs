@@ -56,6 +56,13 @@ namespace com.snake.framework
                         return result;
                     }
 
+                    if (dataType == typeof(byte[]))
+                    {
+                        callback?.Invoke(result, unityWebRequest.downloadHandler.data);
+                        return result;
+                    }
+
+
                     if (dataType != null)
                     {
                         var content = unityWebRequest.downloadHandler.text;
