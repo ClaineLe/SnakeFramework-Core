@@ -7,20 +7,21 @@ namespace com.snake.framework
         public class TimerManager : BaseManager
         {
             private int _timerIndex = int.MinValue;
-            private Dictionary<int, BaseTimer> _timerDic;
-            private List<BaseTimer> _completedTimerList = new List<BaseTimer>();
+            
+            private List<BaseTimer> _timerList;
+
+            private List<BaseTimer> _timerCacheList;
 
             protected override void onInitialization()
             {
-                this._timerDic = new Dictionary<int, BaseTimer>();
-                this._completedTimerList = new List<BaseTimer>();
+                this._timerList = new List<BaseTimer>();
+                this._timerCacheList = new List<BaseTimer>();
             }
             protected override void onPreload()
             {
                 base.onPreload();
                 mFramework.mLifeCycle.mUpdateHandle.AddEventHandler(this.onTick);
             }
-
             public int StartTimer(float durationTime, System.Action onCompletedHandle, bool unscaledTime = false)
             {
                 DurationTimer timer = unscaledTime ? ReferencePool.Take<UnscaleTimer>() : ReferencePool.Take<DurationTimer>();
@@ -31,7 +32,7 @@ namespace com.snake.framework
                    UnityEngine.Time.unscaledTime,
                    UnityEngine.Time.realtimeSinceStartup);
                 timer.SetEndDuration(durationTime);
-                _timerDic.Add(timer.mId, timer);
+                this._timerCacheList.Add(timer);
                 return timer.mId;
             }
 
@@ -45,37 +46,33 @@ namespace com.snake.framework
                    UnityEngine.Time.unscaledTime,
                    UnityEngine.Time.realtimeSinceStartup);
                 timer.SetEndFrameNum(frameCount);
-                _timerDic.Add(timer.mId, timer);
+                this._timerCacheList.Add(timer);
                 return timer.mId;
             }
 
             public bool CancelFramer(int timerId)
             {
-                if (_timerDic.TryGetValue(timerId, out BaseTimer baseTimer) == false)
+                int index = _timerList.FindIndex(a => a.mId == timerId);
+                if (index < 0)
                     return false;
-                baseTimer.Cancel();
+                _timerList[index].Cancel();
                 return true;
             }
 
             protected void onTick(int frameCount, float time, float deltaTime, float unscaledTime, float realElapseSeconds)
             {
-                Dictionary<int, BaseTimer>.Enumerator enumerator = _timerDic.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    BaseTimer timer = enumerator.Current.Value;
-                    timer.Tick(frameCount, time, deltaTime, unscaledTime, realElapseSeconds);
-                    if (timer.mCompleted == true || timer.mCancel)
-                        _completedTimerList.Add(timer);
-                }
+                this._timerList.AddRange(_timerCacheList);
+                _timerCacheList.Clear();
 
-                if (_completedTimerList.Count > 0)
+                for (int i = 0; i < this._timerList.Count; i++)
                 {
-                    for (int i = 0; i < _completedTimerList.Count; i++)
+                    BaseTimer timer = this._timerList[i];
+                    timer.Tick(frameCount, time, deltaTime, unscaledTime, realElapseSeconds);
+                    if (timer.mCompleted == true || timer.mCancel == true)
                     {
-                        _timerDic.Remove(_completedTimerList[i].mId);
-                        ReferencePool.Return(_completedTimerList[i]);
+                        this._timerList.RemoveAt(i--);
+                        ReferencePool.Return(timer);
                     }
-                    _completedTimerList.Clear();
                 }
             }
         }
