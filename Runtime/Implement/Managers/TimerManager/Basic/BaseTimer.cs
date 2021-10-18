@@ -32,6 +32,7 @@
             public virtual void OnReferenceClear()
             {
                 this.mId = 0;
+                this.mCompleted = false;
                 this.mCancel = false;
                 this._onCompletedHandle = null;
             }
