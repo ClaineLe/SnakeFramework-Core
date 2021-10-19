@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using UnityEditor;
 
 namespace com.snake.framework
 {
@@ -7,6 +6,7 @@ namespace com.snake.framework
     {
         public class Fold
         {
+#if UNITY_EDITOR
             static public void ClearFold(string foldPath, string[] ignores = null)
             {
                 DirectoryInfo foldInfo = new DirectoryInfo(foldPath);
@@ -26,7 +26,7 @@ namespace com.snake.framework
                     if (_isExists(fullPath, ignores))
                         continue;
 
-                    FileUtil.DeleteFileOrDirectory(fileSystemInfos[i].FullName.FixSlash());
+                    UnityEditor.FileUtil.DeleteFileOrDirectory(fileSystemInfos[i].FullName.FixSlash());
                 }
             }
 
@@ -51,9 +51,11 @@ namespace com.snake.framework
                         continue;
 
                     string fileName = fileSystemInfos[i].Name;
-                    FileUtil.CopyFileOrDirectory(fromPath + "/" + fileName, toPath + "/" + fileName);
+
+                    UnityEditor.FileUtil.CopyFileOrDirectory(fromPath + "/" + fileName, toPath + "/" + fileName);
                 }
             }
+#endif
 
             static private bool _isExists(string path, string[] ignores = null)
             {
