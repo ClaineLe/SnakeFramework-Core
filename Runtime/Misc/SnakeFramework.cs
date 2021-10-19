@@ -61,9 +61,17 @@ namespace com.snake.framework
 
             public T GetManager<T>() where T : class, IManager
             {
-                if (this._managerDic.TryGetValue(typeof(T), out IManager manager) == false)
+                IManager mgr = GetManager(typeof(T));
+                if (mgr == null)
                     return null;
-                return manager as T;
+                return mgr as T;
+            }
+
+            public IManager GetManager(System.Type mgrType)
+            {
+                if (this._managerDic.TryGetValue(mgrType, out IManager manager) == false)
+                    return null;
+                return manager;
             }
 
             public void InitManagers()
