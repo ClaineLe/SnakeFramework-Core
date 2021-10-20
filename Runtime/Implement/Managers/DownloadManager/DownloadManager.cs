@@ -40,12 +40,20 @@ namespace com.snake.framework
             /// </summary>
             public long mTotalDownloadSize { get; private set; } = 0;
 
+            /// <summary>
+            /// 是否下载中
+            /// </summary>
+            public bool mDownloading { get; private set; } = false;
+
+            /// <summary>
+            /// 完成所有下载任务的回调
+            /// </summary>
+            public System.Action mOnCompleted { get; private set; }
+
             //上一次记录下载速度时间
             private float _prevTickDownloadSpeedTime = 0;
             //上一次记录下载大小
             private long _prevTickDownloadedSize = 0;
-            //下载中
-            private bool _downloading = false;
 
             protected override void onInitialization()
             {
@@ -94,19 +102,20 @@ namespace com.snake.framework
             /// <param name="finishCallback"></param>
             async public void StartDownload(string url, string savePath, int priority = 0)
             {
+                if (mDownloading == false)
+                {
+                    mDownloading = true;
+                    mFramework.mLifeCycle.mUpdateHandle.AddEventHandler(onDownloadProcess);
+                }
+
                 DownloadTask downloadTask = ReferencePool.Take<DownloadTask>();
+                _downloadingList.Add(downloadTask);
                 await downloadTask.SetDownloadInfo(url, savePath);
                 this.mTotalDownloadSize += downloadTask.mTotalSize;
-                _downloadingList.Add(downloadTask);
                 if (priority > 0)
                 {
                     downloadTask.mPriority = priority;
                     sortPriority();
-                }
-                if (_downloading == false)
-                {
-                    _downloading = true;
-                    mFramework.mLifeCycle.mUpdateHandle.AddEventHandler(onDownloadProcess);
                 }
             }
 
@@ -122,6 +131,21 @@ namespace com.snake.framework
                 for (int i = 0; i < this._downloadingList.Count; i++)
                     errors[i] = this._downloadingList[i].mURL;
                 return errors;
+            }
+
+            /// <summary>
+            /// 获取已经获取web头，但未开始下载的数量
+            /// </summary>
+            /// <returns></returns>
+            public int GetReadyTaskCount() 
+            {
+                if (this._downloadingList == null)
+                    return 0;
+
+                int count = 0;
+                for (int i = 0; i < this._downloadingList.Count; i++)
+                    count += this._downloadingList[i].mState == DownloadTask.STATE.ready ? 1 : 0;
+                return count;
             }
 
             /// <summary>
@@ -153,6 +177,8 @@ namespace com.snake.framework
                         return;
                 }
                 mFramework.mLifeCycle.mUpdateHandle.RemoveEventHandler(onDownloadProcess);
+
+                this.mOnCompleted?.Invoke();
 
                 //重置环境
                 reset();
@@ -193,8 +219,10 @@ namespace com.snake.framework
             {
                 this._prevTickDownloadSpeedTime = 0;
                 this._prevTickDownloadedSize = 0;
-                this._downloading = false;
 
+                _downloadingList?.Clear();
+                mOnCompleted = null;
+                mDownloading = false;
                 mActiveDownloadSpeedMonitor = false;
                 mDownloadSpeed = 0;
                 mTotalDownloadSize = 0;
