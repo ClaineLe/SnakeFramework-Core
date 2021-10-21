@@ -2,11 +2,8 @@
 {
     namespace runtime
     {
-        public interface ISplashUserInterface
+        public interface ISplashUserInterface : ICommonBasicState
         {
-            bool mIsDone { get; }
-            void Start();
-            void Tick(float progress);
         }
     }
 }

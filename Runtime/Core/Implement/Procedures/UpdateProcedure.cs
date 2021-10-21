@@ -2,7 +2,7 @@
 {
     namespace runtime
     {
-        internal class UpdateProcedure : BaseProcedure
+        internal class UpdateProcedure : BaseProcedure, IFiniteStateMachineOwner
         {
             private IUpdateController _updateController;
 
@@ -19,7 +19,7 @@
 
             protected override void onTick(ProcedureManager owner, int frameCount, float time, float deltaTime, float unscaledTime, float realElapseSeconds)
             {
-                this._updateController?.Tick();
+                this._updateController?.Tick(frameCount, time, deltaTime, unscaledTime, realElapseSeconds);
                 if (this._updateController?.mIsDone == false)
                     return;
                 owner.SwitchProcedure<PreloadProcedure>();
