@@ -1,12 +1,10 @@
 {
     "name": "com.snake.framework.core.runtime",
     "rootNamespace": "",
-    "references": [
-        "GUID:f0b6920bea5a6b446b18699c7e9ce7f0"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

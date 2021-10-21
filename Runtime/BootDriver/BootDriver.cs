@@ -14,19 +14,19 @@ namespace com.snake.framework
                 BootDriverSetting bootDriverSetting = UnityEngine.Resources.Load<BootDriverSetting>(typeof(BootDriverSetting).Name);
                 if (bootDriverSetting == null)
                 {
-                    Debuger.ErrorFormat("没有在Resources目录下找到BootDriverSetting.asset，请右键创建一个");
+                    SnakeDebuger.ErrorFormat("没有在Resources目录下找到BootDriverSetting.asset，请右键创建一个");
                     return;
                 }
 
                 if (bootDriverSetting.Active == false)
                 {
-                    Debuger.ErrorFormat("框架未激活。bootDriverSetting.Active == false");
+                    SnakeDebuger.ErrorFormat("框架未激活。bootDriverSetting.Active == false");
                     return;
                 }
 
                 if (string.IsNullOrEmpty(bootDriverSetting.BootUpTagName) == true)
                 {
-                    Debuger.ErrorFormat("启动标记Tag不能为空。bootDriverSetting.BootUpTagName：" + bootDriverSetting.BootUpTagName);
+                    SnakeDebuger.ErrorFormat("启动标记Tag不能为空。bootDriverSetting.BootUpTagName：" + bootDriverSetting.BootUpTagName);
                     return;
                 }
 
@@ -34,13 +34,13 @@ namespace com.snake.framework
                 {
                     if (UnityEngine.GameObject.FindWithTag(bootDriverSetting.BootUpTagName) == null)
                     {
-                        Debuger.ErrorFormat("没有找到Tag标记为：{0} 的GameObject对象，不是游戏启动场景", bootDriverSetting.BootUpTagName);
+                        SnakeDebuger.ErrorFormat("没有找到Tag标记为：{0} 的GameObject对象，不是游戏启动场景", bootDriverSetting.BootUpTagName);
                         return;
                     }
                 }
                 catch (UnityEngine.UnityException unityEx)
                 {
-                    Debuger.Error("没有找到启动Tag:" + bootDriverSetting.BootUpTagName + ".(" + unityEx.Message + ")");
+                    SnakeDebuger.Error("没有找到启动Tag:" + bootDriverSetting.BootUpTagName + ".(" + unityEx.Message + ")");
                     return;
                 }
 

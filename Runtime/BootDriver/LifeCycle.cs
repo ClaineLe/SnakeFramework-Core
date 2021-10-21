@@ -9,9 +9,9 @@ namespace com.snake.framework
             public SnakeEvent mStartHandle = new SnakeEvent();
 
             public SnakeEvent mGUIHandle = new SnakeEvent();
-            public SnakeEvent<int, float, float, float, float> mFixedUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
-            public SnakeEvent<int, float, float, float, float> mUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
-            public SnakeEvent<int, float, float, float, float> mLateUpdateHandle = new framework.SnakeEvent<int, float, float, float, float>();
+            public SnakeEvent<int, float, float, float, float> mFixedUpdateHandle = new SnakeEvent<int, float, float, float, float>();
+            public SnakeEvent<int, float, float, float, float> mUpdateHandle = new SnakeEvent<int, float, float, float, float>();
+            public SnakeEvent<int, float, float, float, float> mLateUpdateHandle = new SnakeEvent<int, float, float, float, float>();
 
             public SnakeEvent mApplicationQuitHandle = new SnakeEvent();
             public SnakeEvent<bool> mApplicationFocusHandle = new SnakeEvent<bool>();
