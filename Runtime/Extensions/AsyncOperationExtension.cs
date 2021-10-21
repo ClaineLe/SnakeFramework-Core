@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-static public partial class AsyncOperationExtension
+internal static class AsyncOperationExtension
 {
     /// <summary>
     /// 获取异步等待器
