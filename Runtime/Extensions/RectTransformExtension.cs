@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-static public class RectTransformExtension
+static public partial class RectTransformExtension
 {
     /// <summary>
     /// 设置默认RectTransform数值

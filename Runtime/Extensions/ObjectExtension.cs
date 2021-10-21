@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-static public class ObjectExtensions
+static public partial class ObjectExtensions
 {
     /// <summary>
     /// 判断对象是否为null值
