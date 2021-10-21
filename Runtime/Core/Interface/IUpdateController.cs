@@ -2,12 +2,9 @@
 {
     namespace runtime
     {
-        public interface IUpdateController
+        public interface IUpdateController : ICommonBasicState
         {
-            bool mIsDone { get; }
-            void Enter();
-            void Tick();
-            void Dispose();
+
         }
     }
 }

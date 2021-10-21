@@ -17,14 +17,14 @@ namespace com.snake.framework
                 if (owner.mFramework.mSplashUserInterface != null)
                 {
                     this._splashUserInterface = owner.mFramework.mSplashUserInterface;
-                    this._splashUserInterface.Start();
+                    this._splashUserInterface.Enter();
                 }
             }
 
             protected override void onTick(ProcedureManager owner, int frameCount, float time, float deltaTime, float unscaledTime, float realElapseSeconds)
             {
                 float progress = SnakeFramework.Instance.GetInitProgress();
-                this._splashUserInterface?.Tick(progress);
+                this._splashUserInterface?.Tick(frameCount, time, deltaTime, unscaledTime,realElapseSeconds);
 
                 if (this._splashUserInterface != null && this._splashUserInterface.mIsDone == false)
                     return;
@@ -38,6 +38,16 @@ namespace com.snake.framework
                     return;
                 }
                 owner.SwitchProcedure<PreloadProcedure>();
+            }
+
+            protected override void onExit(ProcedureManager owner, IState<ProcedureManager> toState)
+            {
+                base.onExit(owner, toState);
+                if (_splashUserInterface != null)
+                {
+                    _splashUserInterface.Dispose();
+                    _splashUserInterface = null;
+                }
             }
         }
     }
