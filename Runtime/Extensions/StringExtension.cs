@@ -1,4 +1,4 @@
-﻿public static partial class StringExtension
+﻿internal static partial class StringExtension
 {
     /// <summary>
     /// 修复斜杠
