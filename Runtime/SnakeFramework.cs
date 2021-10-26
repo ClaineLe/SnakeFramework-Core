@@ -23,6 +23,7 @@ namespace com.snake.framework
             private Dictionary<System.Type, IManager> _managerDic;
             private ISnakeFrameworkExt _snakeFrameworkExt;
             public LifeCycle mLifeCycle { get; private set; }
+            public SnakeEnvironment mEnvironment { get; private set; }
             public UnityEngine.GameObject mRoot { get; private set; }
 
             public ISplashUserInterface mSplashUserInterface { get; private set; }
@@ -34,6 +35,13 @@ namespace com.snake.framework
                 UnityEngine.GameObject.DontDestroyOnLoad(mRoot);
                 this.mLifeCycle = LifeCycle.Create(mRoot);
                 this._managerDic = new Dictionary<System.Type, IManager>();
+
+                this.mEnvironment = UnityEngine.Resources.Load<SnakeEnvironment>(typeof(SnakeEnvironment).Name);
+                if (mEnvironment == null)
+                {
+                    SnakeDebuger.ErrorFormat("没有在Resources目录下找到SnakeEnvironment.asset，请右键创建一个");
+                    return;
+                }
             }
 
             public void StartUp(ISnakeFrameworkExt snakeFrameworkExt)
@@ -54,11 +62,13 @@ namespace com.snake.framework
             public void SetupSplashUserInterface<T>() where T : ISplashUserInterface, new()
             {
                 this.mSplashUserInterface = new T();
+                this.mSplashUserInterface.Init();
             }
 
             public void SetupUpdateController<T>() where T : IUpdateController, new() 
             {
                 this.mUpdateController = new T();
+                this.mUpdateController.Init();
             }
 
             public T RegiestManager<T>(bool replace = false) where T : IManager

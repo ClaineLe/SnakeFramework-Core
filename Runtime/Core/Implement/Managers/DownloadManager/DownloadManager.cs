@@ -100,7 +100,7 @@ namespace com.snake.framework
             /// <param name="downloadFilePathQueue"></param>
             /// <param name="downloadingCallback"></param>
             /// <param name="finishCallback"></param>
-            async public void StartDownload(string url, string savePath, int priority = 0)
+            async public void StartDownload(string url, string savePath, int priority = 0, bool backGround = false)
             {
                 if (mDownloading == false)
                 {
@@ -109,6 +109,7 @@ namespace com.snake.framework
                 }
 
                 DownloadTask downloadTask = ReferencePool.Take<DownloadTask>();
+                downloadTask.SetBackGround(backGround);
                 _downloadingList.Add(downloadTask);
                 await downloadTask.SetDownloadInfo(url, savePath);
                 this.mTotalDownloadSize += downloadTask.mTotalSize;
