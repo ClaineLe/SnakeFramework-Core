@@ -62,6 +62,11 @@ namespace com.snake.framework
             public int mPriority;
 
             /// <summary>
+            /// 后台下载
+            /// </summary>
+            public bool mBackGround { get; private set; } = false;
+
+            /// <summary>
             /// 错误信息
             /// </summary>
             public string mError { get; private set; } = string.Empty;
@@ -95,6 +100,15 @@ namespace com.snake.framework
             /// 下载进度
             /// </summary>
             public float mProgress => _request == null ? 0 : _request.downloadProgress;
+
+            /// <summary>
+            /// 设置后台下载
+            /// </summary>
+            /// <param name="active"></param>
+            public void SetBackGround(bool active)
+            {
+                this.mBackGround = active;
+            }
 
             /// <summary>
             /// 设置下载信息
@@ -161,7 +175,7 @@ namespace com.snake.framework
                 this.mSavePath = string.Empty;
                 this.mTotalSize = 0;
                 this.mIsDone = false;
-
+                this.mBackGround = false;
                 if (_request != null)
                 {
                     _request.Dispose();
