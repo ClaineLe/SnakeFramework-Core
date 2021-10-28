@@ -8,7 +8,6 @@ namespace com.snake.framework
         {
             public SnakeEvent mStartHandle = new SnakeEvent();
 
-            public SnakeEvent mGUIHandle = new SnakeEvent();
             public SnakeEvent<int, float, float, float, float> mFixedUpdateHandle = new SnakeEvent<int, float, float, float, float>();
             public SnakeEvent<int, float, float, float, float> mUpdateHandle = new SnakeEvent<int, float, float, float, float>();
             public SnakeEvent<int, float, float, float, float> mLateUpdateHandle = new SnakeEvent<int, float, float, float, float>();
@@ -25,10 +24,6 @@ namespace com.snake.framework
             private void Start()
             {
                 mStartHandle?.BroadCastEvent();
-            }
-            private void OnGUI()
-            {
-                mGUIHandle?.BroadCastEvent();
             }
 
             private void FixedUpdate()
