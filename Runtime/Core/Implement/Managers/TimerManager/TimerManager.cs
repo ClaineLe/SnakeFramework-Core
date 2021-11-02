@@ -64,12 +64,13 @@ namespace com.snake.framework
                 for (int i = 0; i < this._timerList.Count; i++)
                 {
                     BaseTimer timer = this._timerList[i];
-                    timer.Tick(frameCount, time, deltaTime, unscaledTime, realElapseSeconds);
                     if (timer.mCompleted == true || timer.mCancel == true)
                     {
                         this._timerList.RemoveAt(i--);
                         ReferencePool.Return(timer);
+                        continue;
                     }
+                    timer.Tick(frameCount, time, deltaTime, unscaledTime, realElapseSeconds);
                 }
             }
         }
