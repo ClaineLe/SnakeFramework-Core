@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.7] - 2021-11-02
+###Fixed 
+- 计时管理器调用Cancel()后，又执行了一次Tick
+
+###Modify
+- WebAPI增加Post请求时，传入HeaderDict
+
 ## [0.2.6] - 2021-10-28
 ###Removed
 - 生命周期中移除OnGUIHandle

@@ -84,6 +84,7 @@ namespace com.snake.framework
                 /// <param name="pUrl"></param>
                 /// <param name="pTimeout"></param>
                 /// <param name="pCallback"></param>
+                [Obsolete("use post with param byte[] instead")]
                 public static async Task<UnityWebRequest.Result> Post(string uri, string postData, int timeout = 0, Action<UnityWebRequest.Result, string> callback = null)
                 {
                     using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(uri, postData))
@@ -108,6 +109,7 @@ namespace com.snake.framework
                 /// <param name="pUrl"></param>
                 /// <param name="pTimeout"></param>
                 /// <param name="pCallback"></param>
+                [Obsolete("use post with param byte[] instead")]
                 public static async Task<UnityWebRequest.Result> Post(string uri, Dictionary<string, string> formDataDict, int timeout = 0, Action<UnityWebRequest.Result> callback = null)
                 {
                     using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(uri, formDataDict))
@@ -129,6 +131,7 @@ namespace com.snake.framework
                 /// <param name="pTimeout"></param>
                 /// <param name="type">传类型的时候会序列化成该类型的对象 传byte[]或者string会返回对应对象 传其他则会走json反序列化</param>
                 /// <param name="pCallback"></param>
+                [Obsolete("use post with param byte[] instead")]
                 public static async Task<UnityWebRequest.Result> Post(string uri, Dictionary<string, string> formDataDict, Type dataType, int timeout = 0, Action<UnityWebRequest.Result, object> callback = null)
                 {
                     using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(uri, formDataDict))
@@ -160,6 +163,53 @@ namespace com.snake.framework
                         callback?.Invoke(result, jsonObj);
                         return result;
                     }
+                }
+
+                /// <summary>
+                /// post
+                /// </summary>
+                /// <param name="uri"></param>
+                /// <param name="headerDict"></param>
+                /// <param name="content"></param>
+                /// <param name="timeout"></param>
+                /// <param name="callback"></param>
+                public static async void Post(string uri, Dictionary<string, string> headerDict, byte[] content, int timeout = 5, Action<byte[]> callback = null)
+                {
+                    var postTask = Post(uri, headerDict, content, timeout);
+                    await postTask;
+                    callback?.Invoke(postTask.Result);
+                }
+
+                /// <summary>
+                /// post请求
+                /// </summary>
+                /// <param name="uri"></param>
+                /// <param name="headerDict"></param>
+                /// <param name="content"></param>
+                /// <param name="timeout"></param>
+                /// <returns></returns>
+                public static async Task<byte[]> Post(string uri, Dictionary<string, string> headerDict, byte[] content, int timeout = 5)
+                {
+                    using UnityWebRequest request = new UnityWebRequest(uri, UnityWebRequest.kHttpVerbPOST);
+                    if (timeout > 0)
+                    {
+                        request.timeout = timeout;
+                    }
+                    if (headerDict != null)
+                    {
+                        var enumerator = headerDict.GetEnumerator();
+                        while (enumerator.MoveNext())
+                        {
+                            request.SetRequestHeader(enumerator.Current.Key, enumerator.Current.Value);
+                        }
+                    }
+                    if (content != null)
+                    {
+                        request.uploadHandler = new UploadHandlerRaw(content);
+                    }
+                    request.downloadHandler = new DownloadHandlerBuffer();
+                    await request.SendWebRequest();
+                    return request.downloadHandler.data;
                 }
 
                 /// <summary>
