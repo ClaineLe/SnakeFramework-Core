@@ -10,13 +10,11 @@ namespace com.snake.framework
             
             private List<BaseTimer> _timerList;
 
-            private List<BaseTimer> _timerCacheList;
 
             protected override void onInitialization()
             {
                 this._timerList = new List<BaseTimer>();
-                this._timerCacheList = new List<BaseTimer>();
-                mFramework.mLifeCycle.mUpdateHandle.AddEventHandler(this.onTick);
+                this.mFramework.mLifeCycle.mUpdateHandle.AddEventHandler(this.onTick);
             }
 
             public int StartTimer(float durationTime, System.Action onCompletedHandle, bool unscaledTime = false)
@@ -29,7 +27,6 @@ namespace com.snake.framework
                    UnityEngine.Time.unscaledTime,
                    UnityEngine.Time.realtimeSinceStartup);
                 timer.SetEndDuration(durationTime);
-                this._timerCacheList.Add(timer);
                 return timer.mId;
             }
 
@@ -43,7 +40,7 @@ namespace com.snake.framework
                    UnityEngine.Time.unscaledTime,
                    UnityEngine.Time.realtimeSinceStartup);
                 timer.SetEndFrameNum(frameCount);
-                this._timerCacheList.Add(timer);
+                this._timerList.Add(timer);
                 return timer.mId;
             }
 
@@ -58,9 +55,6 @@ namespace com.snake.framework
 
             protected void onTick(int frameCount, float time, float deltaTime, float unscaledTime, float realElapseSeconds)
             {
-                this._timerList.AddRange(_timerCacheList);
-                _timerCacheList.Clear();
-
                 for (int i = 0; i < this._timerList.Count; i++)
                 {
                     BaseTimer timer = this._timerList[i];
@@ -68,9 +62,7 @@ namespace com.snake.framework
                     {
                         this._timerList.RemoveAt(i--);
                         ReferencePool.Return(timer);
-                        continue;
                     }
-                    timer.Tick(frameCount, time, deltaTime, unscaledTime, realElapseSeconds);
                 }
             }
         }
