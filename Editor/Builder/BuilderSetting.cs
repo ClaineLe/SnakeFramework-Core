@@ -5,9 +5,10 @@ namespace com.snake.framework
 {
     namespace editor
     {
+        [UnityEngine.CreateAssetMenu(fileName = "BuilderSetting")]
         public class BuilderSetting : SnakeBasicSetting<BuilderSetting>
         {
-            [Header("资源打包规整路径")]
+            [Header("[Editor]资源打包规整路径")]
             public string mAssetRulesPath;
 
 

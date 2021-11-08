@@ -12,6 +12,13 @@ namespace com.snake.framework
     {
         public class BuilderEditorWindow : EditorWindow
         {
+            [MenuItem("SnakeTools/资源构建编辑器")]
+            static public void ShowBuilderEditorWindow()
+            {
+                BuilderEditorWindow wnd = GetWindow<BuilderEditorWindow>();
+                wnd.titleContent = new GUIContent("资源构建编辑器");
+            }
+
             private Vector2 _assetRuleViewScrollPosition;
             private List<AssetRuleDraw> assetRuleDrawList;
             private EnvironmentSetting _envSetting;

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.10] - 2021-11-08
+###Added
+- 资源构建编辑器打开窗口方法
+
+###Modify
+- 修改构建配置Header
+- Header增加编辑器前缀
+
 ## [0.2.9] - 2021-11-08
 ###Added
 - 增加环境变量配置(EnvironmentSetting.cs)
