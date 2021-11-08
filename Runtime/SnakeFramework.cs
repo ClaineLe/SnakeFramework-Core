@@ -23,7 +23,7 @@ namespace com.snake.framework
             private Dictionary<System.Type, IManager> _managerDic;
             private ISnakeFrameworkExt _snakeFrameworkExt;
             public LifeCycle mLifeCycle { get; private set; }
-            public SnakeEnvironment mEnvironment { get; private set; }
+            public EnvironmentSetting mEnvironmentSetting { get; private set; }
             public UnityEngine.GameObject mRoot { get; private set; }
 
             public ISplashUserInterface mSplashUserInterface { get; private set; }
@@ -36,8 +36,8 @@ namespace com.snake.framework
                 this.mLifeCycle = LifeCycle.Create(mRoot);
                 this._managerDic = new Dictionary<System.Type, IManager>();
 
-                this.mEnvironment = UnityEngine.Resources.Load<SnakeEnvironment>(typeof(SnakeEnvironment).Name);
-                if (mEnvironment == null)
+                this.mEnvironmentSetting = EnvironmentSetting.Get();
+                if (this.mEnvironmentSetting == null)
                 {
                     SnakeDebuger.ErrorFormat("没有在Resources目录下找到SnakeEnvironment.asset，请右键创建一个");
                     return;
@@ -47,9 +47,9 @@ namespace com.snake.framework
             public void StartUp(ISnakeFrameworkExt snakeFrameworkExt)
             {
                 this._snakeFrameworkExt = snakeFrameworkExt;
-                RegiestManager<TimerManager>();
                 RegiestManager<DownloadManager>();
                 RegiestManager<ProcedureManager>();
+                RegiestManager<TimerManager>();
                 this._snakeFrameworkExt.Initialization();
                 GetManager<ProcedureManager>().SwitchProcedure<BootUpProcedure>();
             }

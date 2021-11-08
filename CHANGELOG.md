@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.9] - 2021-11-08
+###Added
+- 增加环境变量配置(EnvironmentSetting.cs)
+- 构建配置(BuilderSetting.cs)
+- 资源打包编辑器
+- UPM依赖：unity打包工具
+
+###Modify
+- Setting结构，优化启动流程
+- 框架拓展的程序集名抽至启动设置中填写(BootDriverSetting.cs)
+
+###Fixed
+- 打包回调为null，在出现打包异常时报错
+
 ## [0.2.8] - 2021-11-03
 ###Fixed 
 - 计时管理器调用Cancel()后，又执行了一次Tick
