@@ -11,18 +11,7 @@ namespace com.snake.framework
             [UnityEngine.RuntimeInitializeOnLoadMethod]
             static public void BootUp()
             {
-                BootDriverSetting bootDriverSetting = UnityEngine.Resources.Load<BootDriverSetting>(typeof(BootDriverSetting).Name);
-                if (bootDriverSetting == null)
-                {
-                    SnakeDebuger.ErrorFormat("没有在Resources目录下找到BootDriverSetting.asset，请右键创建一个");
-                    return;
-                }
-
-                if (bootDriverSetting.Active == false)
-                {
-                    SnakeDebuger.ErrorFormat("框架未激活。bootDriverSetting.Active == false");
-                    return;
-                }
+                BootDriverSetting bootDriverSetting = BootDriverSetting.Get();
 
                 if (string.IsNullOrEmpty(bootDriverSetting.BootUpTagName) == true)
                 {
@@ -54,7 +43,7 @@ namespace com.snake.framework
                 System.Reflection.Assembly[] s_Assemblies = Utility.Assembly.GetAssemblies();
                 foreach (System.Reflection.Assembly assembly in s_Assemblies)
                 {
-                    if (assembly.GetName().Name.Equals(bootDriverSetting.RuntimeAssemblyName))
+                    if (assembly.GetName().Name.Equals(bootDriverSetting.FrameworkExtTypeAssemblyName))
                     {
                         type = assembly.GetType(bootDriverSetting.FrameworkExtTypeFullName);
                         break;
