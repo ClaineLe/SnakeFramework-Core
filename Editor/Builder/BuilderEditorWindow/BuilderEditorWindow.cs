@@ -43,6 +43,13 @@ namespace com.snake.framework
                     SnakeDebuger.Error("未在EnvironmentSetting.asset中配置，资源规则路径.");
                     return;
                 }
+
+                if (Directory.Exists(_builderSetting.mAssetRulesPath) == false)
+                {
+                    SnakeDebuger.Error("BuilderSetting.asset配置的资源规则目录不存在");
+                    return;
+                }
+
                 string[] files = Directory.GetFiles(_builderSetting.mAssetRulesPath, "*.asset");
 
                 string tmpPath = string.Empty;
@@ -55,10 +62,11 @@ namespace com.snake.framework
                 }
                 assetRuleDrawList.Sort((left, right) => left.mAssetRule.priority.CompareTo(right.mAssetRule.priority));
             }
+
             public void CreateGUI()
             {
                 VisualElement root = rootVisualElement;
-                var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UnityPackages/com.snake.framework.core/Editor/Builder/BuilderEditorWindow/BuilderEditorWindow.uxml");
+                var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(SnakeEditorUtility.GetPackagesPath() + "/Editor/Builder/BuilderEditorWindow/BuilderEditorWindow.uxml");
                 VisualElement labelFromUXML = visualTree.Instantiate();
                 labelFromUXML.Q<IMGUIContainer>().onGUIHandler = OnGUIWithAssetRoleView;
                 root.Add(labelFromUXML);
