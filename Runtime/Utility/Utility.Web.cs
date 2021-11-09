@@ -173,7 +173,7 @@ namespace com.snake.framework
                 /// <param name="content"></param>
                 /// <param name="timeout"></param>
                 /// <param name="callback"></param>
-                public static async void Post(string uri, Dictionary<string, string> headerDict, byte[] content, int timeout = 5, Action<byte[]> callback = null)
+                public static async void PostWithCallBack(string uri, Dictionary<string, string> headerDict, byte[] content, int timeout = 5, Action<byte[]> callback = null)
                 {
                     var postTask = Post(uri, headerDict, content, timeout);
                     await postTask;

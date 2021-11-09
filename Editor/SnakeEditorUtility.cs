@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,17 +10,14 @@ namespace com.snake.framework
     {
         public class SnakeEditorUtility
         {
-            static public string GetPath(string _scriptName)
+            static public string GetPackagesPath()
             {
-                string[] path = UnityEditor.AssetDatabase.FindAssets(_scriptName);
-                if (path.Length > 1)
+                string packagePath = "Packages/SnakeFramework-Develop";
+                if (Directory.Exists(packagePath))
                 {
-                    Debug.LogError("有同名文件" + _scriptName + "获取路径失败");
-                    return null;
+                    return packagePath;
                 }
-                //将字符串中得脚本名字和后缀统统去除掉
-                string _path = AssetDatabase.GUIDToAssetPath(path[0]).Replace((@"/" + _scriptName + ".cs"), "");
-                return _path;
+                return "Assets/UnityPackages/com.snake.framework.core";
             }
         }
     }
