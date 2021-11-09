@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.13] - 2021-11-09
+###Fixed
+- 获取Packages路径
+
 ## [0.2.12] - 2021-11-09
 ###Fixed
 - 获取Packages路径

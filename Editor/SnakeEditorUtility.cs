@@ -12,7 +12,7 @@ namespace com.snake.framework
         {
             static public string GetPackagesPath()
             {
-                string packagePath = "Packages/SnakeFramework-Code";
+                string packagePath = "Packages/com.snake.framework.core";
                 if (Directory.Exists(packagePath))
                 {
                     return packagePath;
