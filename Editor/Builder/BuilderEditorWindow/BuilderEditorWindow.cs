@@ -87,7 +87,11 @@ namespace com.snake.framework
                 for (int i = 0; i < assetRuleDrawList.Count; i++)
                 {
                     assetRuleDrawList[i].mAssetRule.priority = i;
+                    EditorUtility.SetDirty(assetRuleDrawList[i].mAssetRule);
                 }
+
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
 
             /// <summary>
@@ -194,8 +198,11 @@ namespace com.snake.framework
                                                     string resPath = AssetDatabase.GetAssetPath(_foldDefAsset);
                                                     if (resPath.StartsWith(_envSetting.mResRootPath) == false)
                                                     {
-                                                        SnakeDebuger.Error("资源根目录必须为：" + _envSetting.mResRootPath);
-                                                        return;
+                                                        if (resPath.StartsWith("Packages") == false)
+                                                        {
+                                                            SnakeDebuger.Error("资源根目录必须为：" + _envSetting.mResRootPath);
+                                                            return;
+                                                        }
                                                     }
                                                     assetRuleDraw.mAssetRule.foldPath = resPath;
                                                 }
@@ -209,9 +216,17 @@ namespace com.snake.framework
                                         if (GUILayout.Button(assetRuleDraw.modifyFoldPath ? "确定" : "修改", GUILayout.Width(60)))
                                         {
                                             assetRuleDraw.modifyFoldPath = !assetRuleDraw.modifyFoldPath;
+
+                                            if (assetRuleDraw.modifyFoldPath == false)
+                                            {
+                                                EditorUtility.SetDirty(assetRuleDraw.mAssetRule);
+                                                AssetDatabase.SaveAssets();
+                                                AssetDatabase.Refresh();
+                                            }
                                         }
                                     }
-                                    EditorGUILayout.PropertyField(assetRuleDraw.mSerializedObject.FindProperty("single"), new GUIContent("独立打包"));
+                                    assetRuleDraw.mAssetRule.packerMode = (PACKER_MODE)EditorGUILayout.EnumPopup("模式", assetRuleDraw.mAssetRule.packerMode);
+
                                     using (new EditorGUILayout.HorizontalScope())
                                     {
                                         using (new EditorGUILayout.VerticalScope("HelpBox"))
