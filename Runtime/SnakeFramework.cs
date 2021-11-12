@@ -50,7 +50,7 @@ namespace com.snake.framework
                 RegiestManager<DownloadManager>();
                 RegiestManager<ProcedureManager>();
                 RegiestManager<TimerManager>();
-                RegiestManager<BundleManager>();
+                //RegiestManager<BundleManager>();
                 this._snakeFrameworkExt.Initialization();
                 GetManager<ProcedureManager>().SwitchProcedure<BootUpProcedure>();
             }

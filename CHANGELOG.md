@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.2.15] - 2021-11-12
+###Fixed
+- BundleManager报错(暂时先屏蔽)
+
 ## [0.2.14] - 2021-11-12
 ###Fixed
 - 修改打包规则目录AssetRule数据丢失
