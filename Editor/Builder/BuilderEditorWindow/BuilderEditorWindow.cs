@@ -74,7 +74,7 @@ namespace com.snake.framework
 
             public void AssetBundleBuild(BundleBuildParameters parameters)
             {
-                AssetBundleBuilder.BuildAssetBundle(parameters, null);
+                //AssetBundleBuilder.BuildAssetBundle(parameters, null);
             }
 
             private void MoveItem(int index, bool moveUp) 
