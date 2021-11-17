@@ -10,6 +10,31 @@ namespace com.snake.framework
         public static partial class Utility
         {
             /// <summary>
+            /// 校验文件MD5
+            /// </summary>
+            /// <param name="fileName"></param>
+            /// <param name="preMD5"></param>
+            /// <returns></returns>
+            static public bool CheckFileMD5(string fileName, string preMD5)
+            {
+                int bit = preMD5.Length;
+                if (bit != 16 && bit != 32)
+                {
+                    SnakeDebuger.ErrorFormat("[文件MD5校验错误]md5格式错误，长度应为16位或32位.\nfileName:{0}\npreMD5:{1}", fileName, preMD5);
+                    return false;
+                }
+
+                string md5 = FileMD5(fileName);
+                if (string.IsNullOrEmpty(md5) == true)
+                {
+                    SnakeDebuger.ErrorFormat("[文件MD5校验错误]获取md5失败，长度应为16位或32位.\nfileName:{0}\npreMD5:{1}", fileName, preMD5);
+                    return false;
+                }
+
+                return md5.Equals(preMD5);
+            }
+
+            /// <summary>
             /// 获取文件的MD5码
             /// </summary>
             /// <param name="fileName">传入的文件名（含路径及后缀名）</param>
