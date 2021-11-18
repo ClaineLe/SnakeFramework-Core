@@ -1,3 +1,12 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:IMGUIContainer />
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:VisualElement style="flex-direction: row; height: auto; min-height: 22px;">
+        <ui:Button text="开始" display-tooltip-when-elided="true" name="mBtnBegin" style="flex-grow: 1;" />
+        <ui:Button text="结束" display-tooltip-when-elided="true" name="mBtnEnd" style="flex-grow: 1;" />
+    </ui:VisualElement>
+    <ui:VisualElement style="flex-direction: row; height: auto; min-height: 22px;">
+        <ui:Button text="清空" display-tooltip-when-elided="true" name="mBtnClear" style="flex-grow: 1;" />
+        <ui:Button text="保存" display-tooltip-when-elided="true" name="mBtnSave" style="flex-grow: 1;" />
+    </ui:VisualElement>
+    <ui:Label text="Label" display-tooltip-when-elided="true" name="mLabState" />
+    <ui:ScrollView style="height: 600px;" />
 </ui:UXML>
