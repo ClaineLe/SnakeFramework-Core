@@ -28,6 +28,8 @@ namespace com.snake.framework
                 wnd.titleContent = new GUIContent("×ÊÔ´Â¼ÖÆ±à¼­Æ÷");
             }
 
+            static public UsingAssetRecordWindow Instance { get; private set; }
+
             private ScrollView _scrollView;
 
             private bool _running = false;
@@ -37,8 +39,13 @@ namespace com.snake.framework
             private void OnEnable()
             {
                 _setting = BuilderSetting.EditorGet();
+                Instance = this;
             }
 
+            private void OnDestroy()
+            {
+                Instance = null;
+            }
             public void CreateGUI()
             {
                 VisualElement root = rootVisualElement;
