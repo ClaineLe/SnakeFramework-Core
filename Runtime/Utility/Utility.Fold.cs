@@ -8,6 +8,8 @@ namespace com.snake.framework
         {
             public class Fold
             {
+
+
 #if UNITY_EDITOR
                 static public void ClearFold(string foldPath, string[] ignores = null)
                 {
@@ -24,10 +26,9 @@ namespace com.snake.framework
                         if (fileSystemInfos[i].Exists == false)
                             continue;
 
-                        string fullPath = fileSystemInfos[i].FullName;
+                        string fullPath = fileSystemInfos[i].FullName.FixSlash();
                         if (_isExists(fullPath, ignores))
                             continue;
-
                         UnityEditor.FileUtil.DeleteFileOrDirectory(fileSystemInfos[i].FullName.FixSlash());
                     }
                 }
@@ -66,11 +67,44 @@ namespace com.snake.framework
 
                     for (int i = 0; i < ignores.Length; i++)
                     {
-                        if (path.Contains(ignores[i]) == true)
+                        if (path.Contains(ignores[i].FixSlash()) == true)
                             return true;
                     }
                     return false;
                 }
+
+                /// <summary>
+                /// 获取目录下文件
+                /// </summary>
+                /// <param name="foldPath">目录路径</param>
+                /// <param name="searchOption">搜索配置</param>
+                /// <param name="filters">筛选</param>
+                /// <param name="ignores">忽略</param>
+                /// <returns></returns>
+                static public FileInfo[] GetFiles(string foldPath, SearchOption searchOption, string[] filters, string[] ignores)
+                {
+                    DirectoryInfo dirInfo = new DirectoryInfo(foldPath);
+                    System.Collections.Generic.List<FileInfo> fileInfoList = new System.Collections.Generic.List<FileInfo>(dirInfo.GetFiles("*", searchOption));
+
+                    if (filters != null && filters.Length > 0)
+                    {
+                        foreach (string filter in filters)
+                        {
+                            fileInfoList.RemoveAll(a => a.FullName.Contains(filter) == false);
+                        }
+                    }
+
+                    if (ignores != null && ignores.Length > 0)
+                    {
+                        foreach (string ignore in ignores)
+                        {
+                            fileInfoList.RemoveAll(a => a.FullName.Contains(ignore) == true);
+                        }
+                    }
+                    return fileInfoList.ToArray();
+                }
+
+
             }
         }
     }

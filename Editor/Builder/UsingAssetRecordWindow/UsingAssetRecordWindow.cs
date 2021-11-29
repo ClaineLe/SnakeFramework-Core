@@ -90,7 +90,7 @@ namespace com.snake.framework
 
             private void save()
             {
-                string savePath = _setting.mUsingAssetsFilePath;
+                string savePath = _setting.mDefAssetRecordFile;
                 if (System.IO.File.Exists(savePath))
                     System.IO.File.Delete(savePath);
                 List<VisualElement> itemList = _scrollView.Children().ToList();
