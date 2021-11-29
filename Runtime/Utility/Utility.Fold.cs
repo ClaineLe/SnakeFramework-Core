@@ -26,9 +26,10 @@ namespace com.snake.framework
                         if (fileSystemInfos[i].Exists == false)
                             continue;
 
-                        string fullPath = fileSystemInfos[i].FullName.FixSlash();
+                        string fullPath = fileSystemInfos[i].FullName;
                         if (_isExists(fullPath, ignores))
                             continue;
+
                         UnityEditor.FileUtil.DeleteFileOrDirectory(fileSystemInfos[i].FullName.FixSlash());
                     }
                 }
@@ -98,7 +99,7 @@ namespace com.snake.framework
                     {
                         foreach (string ignore in ignores)
                         {
-                            fileInfoList.RemoveAll(a => a.FullName.Contains(ignore) == true);
+                            fileInfoList.RemoveAll(a => a.FullName.Contains(ignore.FixSlash()) == true);
                         }
                     }
                     return fileInfoList.ToArray();
