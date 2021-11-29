@@ -25,7 +25,7 @@ namespace com.snake.framework
             /// <param name="buildTarget"></param>
             /// <param name="resVersion"></param>
             /// <param name="callback"></param>
-            static public void BuildAssetBundle(string assetBundleOutputPath, BuildTarget buildTarget, AssetBundleBuild[] assetBundleBuilds, Action<AssetBundleCatalog> callback, string extBundleOutputPath = null)
+            static public void BuildAssetBundle(string relativeStreamingAssetPath, BuildTarget buildTarget, AssetBundleBuild[] assetBundleBuilds, Action<AssetBundleCatalog> callback, string extBundleOutputPath = null)
             {
                 BuildTargetGroup buildTargetGroup = BuildPipeline.GetBuildTargetGroup(buildTarget);
 
@@ -52,21 +52,21 @@ namespace com.snake.framework
                 foreach (var a in Directory.GetFiles(setting.mBundleCachePath, "*.json"))
                     File.Delete(a);
 
-                generateAssetBundleCatalog(assetBundleBuilds, results.BundleInfos, ref assetBundleCatalog);
+                generateAssetBundleCatalog(relativeStreamingAssetPath, assetBundleBuilds, results.BundleInfos, ref assetBundleCatalog);
 
-                sourcePostProcessing(setting, extBundleOutputPath, assetBundleBuilds, results);
+                sourcePostProcessing(relativeStreamingAssetPath, setting, extBundleOutputPath, assetBundleBuilds, results);
 
                 callback?.Invoke(assetBundleCatalog);
             }
 
-            static private void sourcePostProcessing(BuilderSetting setting, string extBundleOutputPath, AssetBundleBuild[] builds, IBundleBuildResults results)
+            static private void sourcePostProcessing(string relativeStreamingAssetPath, BuilderSetting setting, string extBundleOutputPath, AssetBundleBuild[] builds, IBundleBuildResults results)
             {
-                string defBundleOutputPath = Path.Combine(Application.streamingAssetsPath, setting.mBundleCachePath);
+                string streamingAssetPath = Path.Combine(Application.streamingAssetsPath, relativeStreamingAssetPath);
                 //清理默认资源目录
-                if (Directory.Exists(defBundleOutputPath))
+                if (Directory.Exists(streamingAssetPath))
                 {
-                    Directory.Delete(defBundleOutputPath, true);
-                    Directory.CreateDirectory(defBundleOutputPath);
+                    Directory.Delete(streamingAssetPath, true);
+                    Directory.CreateDirectory(streamingAssetPath);
                 }
 
                 //清理拓展资源目录
@@ -82,7 +82,7 @@ namespace com.snake.framework
                     foreach (var iter in results.BundleInfos)
                     {
                         string formPath = Path.Combine(setting.mBundleCachePath, iter.Key);
-                        string toPath = Path.Combine(defBundleOutputPath, iter.Key);
+                        string toPath = Path.Combine(streamingAssetPath, iter.Key);
                         FileInfo toFileInfo = new FileInfo(toPath);
                         if (toFileInfo.Directory.Exists == false)
                             toFileInfo.Directory.Create();
@@ -141,7 +141,7 @@ namespace com.snake.framework
 
                             //核心逻辑，判断是否为默认Bundle资源，确定复制到路径
                             index = defBundleList.FindIndex(a => a.Equals(iter.Key));
-                            string toPath = Path.Combine(index >= 0 ? defBundleOutputPath : extBundleOutputPath, iter.Key);
+                            string toPath = Path.Combine(index >= 0 ? streamingAssetPath : extBundleOutputPath, iter.Key);
 
                             //复制
                             FileInfo toFileInfo = new FileInfo(toPath);
@@ -154,13 +154,13 @@ namespace com.snake.framework
                 AssetDatabase.Refresh();
             }
 
-            static private void generateAssetBundleCatalog(AssetBundleBuild[] builds, Dictionary<string, BundleDetails> bundleInfos, ref AssetBundleCatalog assetBundleCatalog)
+            static private void generateAssetBundleCatalog(string relativeStreamingAssetPath, AssetBundleBuild[] builds, Dictionary<string, BundleDetails> bundleInfos, ref AssetBundleCatalog assetBundleCatalog)
             {
                 foreach (AssetBundleBuild a in builds)
                 {
                     foreach (string b in a.assetNames)
                     {
-                        assetBundleCatalog.mPathMapping.Add(b, "assetbundle/" + a.assetBundleName);
+                        assetBundleCatalog.mPathMapping.Add(b, Path.Combine(relativeStreamingAssetPath, a.assetBundleName));
                     }
                     BundleDetails bundleDetails;
                     if (bundleInfos.TryGetValue(a.assetBundleName, out bundleDetails))
@@ -173,10 +173,10 @@ namespace com.snake.framework
                             depends = dependList.Distinct().ToArray();
                             for (var i = 0; i < depends.Length; i++)
                             {
-                                depends[i] = $"assetbundle/{depends[i]}";
+                                depends[i] = Path.Combine(relativeStreamingAssetPath, depends[i]);
                             }
                         }
-                        assetBundleCatalog.mDepensMapping.Add("assetbundle/" + a.assetBundleName, depends);
+                        assetBundleCatalog.mDepensMapping.Add(Path.Combine(relativeStreamingAssetPath, a.assetBundleName), depends);
                     }
                 }
             }
