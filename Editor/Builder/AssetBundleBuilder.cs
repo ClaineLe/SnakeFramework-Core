@@ -86,7 +86,7 @@ namespace com.snake.framework
                         FileInfo toFileInfo = new FileInfo(toPath);
                         if (toFileInfo.Directory.Exists == false)
                             toFileInfo.Directory.Create();
-                        File.Move(formPath, toPath);
+                        File.Copy(formPath, toPath);
                     }
                 }
                 else
@@ -114,7 +114,7 @@ namespace com.snake.framework
                             FileInfo toFileInfo = new FileInfo(toPath);
                             if (toFileInfo.Directory.Exists == false)
                                 toFileInfo.Directory.Create();
-                            File.Move(formPath, toPath);
+                            File.Copy(formPath, toPath);
                         }
                     }
                     else
